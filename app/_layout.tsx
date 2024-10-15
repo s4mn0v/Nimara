@@ -2,6 +2,8 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { LogBox } from "react-native";
 
+import ExpoStatusBar from 'expo-status-bar/build/ExpoStatusBar';
+
 LogBox.ignoreAllLogs(true);
 
 export default function RootLayout() {

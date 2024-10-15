@@ -1,54 +1,62 @@
 import React, { useState, useRef } from 'react';
 import { View, TouchableOpacity, Animated, Easing, Platform, Text } from 'react-native';
-import { Tabs, useRouter, Link } from "expo-router";
+import { Tabs, useRouter, Link, Href } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { LogBox } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import styles from "@/constants/Style"
+import ExpoStatusBar from 'expo-status-bar/build/ExpoStatusBar';
 
 LogBox.ignoreAllLogs(true);
 
-type TabName = '/' | '/business' | '/students' | '/archived' | '/managed' | '/trash' | '/web-view/about';
+type TabName = '/' | '/business' | '/students' | '/archived' | '/managed' | '/trash' | '/web-view/reports';
 
 interface TabButtonProps {
-  name: TabName;
+  name: FlexibleHref;
   icon: keyof typeof Ionicons.glyphMap;
   color: string;
   onPress: () => void;
 }
 
+type FlexibleHref = Href<string | object> | TabName;
+
 interface CustomLinkProps {
-  href: string;
-  [key: string]: any;
+  href: FlexibleHref;
+  children: React.ReactNode;
+  style?: object;
 }
 
-const CustomLink: React.FC<CustomLinkProps> = ({ href, ...props }) => {
-  if (Platform.OS === 'web' && !href.startsWith('/web-view') && href !== '/') {
-    href = '/+not-found';
-  }
-  return <Link href={href} {...props} />;
+const CustomLink: React.FC<CustomLinkProps> = ({ href, children, style }) => {
+  const adjustedHref = (Platform.OS === 'web' && typeof href === 'string' && !href.startsWith('/web-view') && href !== '/')
+    ? ('../+not-found' as Href<string | object>)
+    : (href as Href<string | object>);
+  return <Link href={adjustedHref} style={style}>{children}</Link>;
 };
 
 const TabButton: React.FC<TabButtonProps> = ({ name, icon, color, onPress }) => (
   <TouchableOpacity style={styles.smenu.tabButton} onPress={onPress}>
-    <CustomLink href={name}>
+    {Platform.OS === 'web' ? (
+      <CustomLink href={name}>
+        <Ionicons name={icon} color={color} size={24} />
+      </CustomLink>
+    ) : (
       <Ionicons name={icon} color={color} size={24} />
-    </CustomLink>
+    )}
   </TouchableOpacity>
 );
 
 const WebHeader: React.FC = () => (
   <View style={styles.webHeader.container}>
     <CustomLink href="/" style={styles.webHeader.link}>
-      <Text style={styles.webHeader.linkText}>Home</Text>
+      <Text style={styles.webHeader.linkText}>Inicio</Text>
     </CustomLink>
-    <CustomLink href="/web-view/about" style={styles.webHeader.link}>
-      <Text style={styles.webHeader.linkText}>About</Text>
+    <CustomLink href="/web-view/reports" style={styles.webHeader.link}>
+      <Text style={styles.webHeader.linkText}>Reportes</Text>
     </CustomLink>
   </View>
 );
 
-export default function TabLayout() {
+export default function Layout() {
   const [activeTab, setActiveTab] = useState<TabName>('/');
   const [isOpen, setIsOpen] = useState(false);
   const animation = useRef(new Animated.Value(0)).current;
@@ -65,12 +73,12 @@ export default function TabLayout() {
     setIsOpen(!isOpen);
   };
 
-  const navigateToTab = (tabName: TabName) => {
-    setActiveTab(tabName);
-    if (Platform.OS === 'web' && !tabName.startsWith('/web-view') && tabName !== '/') {
-      router.push('/+not-found');
+  const navigateToTab = (tabName: FlexibleHref) => {
+    setActiveTab(tabName as TabName);
+    if (Platform.OS === 'web' && typeof tabName === 'string' && !tabName.startsWith('/web-view') && tabName !== '/') {
+      router.push('../+not-found');
     } else {
-      router.push(tabName);
+      router.push(tabName as Href<string | object>);
     }
     toggleDropdown();
   };
@@ -99,61 +107,11 @@ export default function TabLayout() {
             },
           }}
         >
-          <Tabs.Screen
-            name="index"
-            options={{
-              href: '/',
-              headerTitle: "Inicio",
-              headerLeft: () => null,
-            }}
-          />
-          <Tabs.Screen
-            name="business"
-            options={{
-              href: '/business',
-              headerTitle: "Empresas",
-            }}
-          />
-          <Tabs.Screen
-            name="students"
-            options={{
-              href: '/students',
-              headerTitle: "Estudiantes",
-            }}
-          />
-          <Tabs.Screen
-            name="archived"
-            options={{
-              href: '/archived',
-              headerTitle: "Reportes Archivados",
-            }}
-          />
-          <Tabs.Screen
-            name="managed"
-            options={{
-              href: '/managed',
-              headerTitle: "Reportes Gestionados",
-            }}
-          />
-          <Tabs.Screen
-            name="trash"
-            options={{
-              href: '/trash',
-              headerTitle: "Reportes En Pepelera",
-            }}
-          />
-          <Tabs.Screen
-            name="about"
-            options={{
-              href: '/web-view/about',
-              headerTitle: "Acerca",
-            }}
-          />
         </Tabs>
 
         {Platform.OS !== 'web' && (
           <>
-            <StatusBar style='light' />
+            <ExpoStatusBar style='light' />
             <TouchableOpacity
               style={styles.smenu.fab}
               onPress={toggleDropdown}

@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from 'react-native'
 export default function About() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to the About View!</Text>
+      <Text style={styles.title}>Welcome to the Reports View!</Text>
     </View>
   )
 }
