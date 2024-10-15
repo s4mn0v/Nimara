@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native';
+import { Platform, Text, View } from 'react-native';
 import styeles from '@/constants/Style';
 
 export default function BusinessScreen() {

@@ -1,16 +1,10 @@
 import React from 'react'
-import { View, Text, StyleSheet, Platform } from 'react-native'
-import WebView from './web-view'
+import { View, Text, StyleSheet } from 'react-native'
 
-export default function Home() {
-  if (Platform.OS === 'web') {
-    return <WebView />
-  }
-
+export default function About() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to the Mobile View XD!</Text>
-      <Text style={styles.subtitle}>This content is specific to mobile platforms.</Text>
+      <Text style={styles.title}>Welcome to the About View!</Text>
     </View>
   )
 }

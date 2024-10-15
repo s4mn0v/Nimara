@@ -12,6 +12,24 @@ const sstandard = StyleSheet.create({
   },
 });
 
+const webHeader = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: '#f0f0f0',
+    height: 50,
+  },
+  link: {
+    marginLeft: 20,
+  },
+  linkText: {
+    fontSize: 16,
+    color: '#9F2CBF',
+    textTransform: 'capitalize',
+  },
+})
+
 const smenu = StyleSheet.create({
   container: {
     flex: 1,
@@ -25,7 +43,7 @@ const smenu = StyleSheet.create({
     justifyContent: 'center',
     right: 20,
     bottom: 20,
-    backgroundColor: '#ffd33d',
+    backgroundColor: 'purple',
     borderRadius: 28,
     zIndex: 2,
     elevation: 3,
@@ -51,4 +69,4 @@ const smenu = StyleSheet.create({
   },
 });
 
-export default { sstandard, smenu };
+export default { sstandard, smenu, webHeader };
