@@ -9,7 +9,7 @@ import ExpoStatusBar from 'expo-status-bar/build/ExpoStatusBar';
 
 LogBox.ignoreAllLogs(true);
 
-type TabName = '/' | '/business' | '/students' | '/archived' | '/managed' | '/trash' | '/web-view/reports';
+type TabName = '/' | '/business' | '/students' | '/archived' | '/managed' | '/trash' | '/users' | '/web-view/reports';
 
 interface TabButtonProps {
   name: FlexibleHref;
@@ -135,6 +135,12 @@ export default function Layout() {
               ]}
               pointerEvents={isOpen ? 'auto' : 'none'}
             >
+              <TabButton
+                name="/users"
+                icon={activeTab === '/users' ? 'person-circle-outline' : 'person-circle'}
+                color="#9F2CBF"
+                onPress={() => navigateToTab('/users')}
+              />
               <TabButton
                 name="/trash"
                 icon={activeTab === '/trash' ? 'trash-outline' : 'trash'}
